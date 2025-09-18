@@ -1,5 +1,5 @@
 from flask import Flask
-from flask_restful import Api, Resource
+from flask_restful import Api
 from flask_sqlalchemy import SQLAlchemy
 from resources.book import Books
 
@@ -10,19 +10,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 
-books = [
-    {
-        'title': 'Hora e a Vez de Augusto Matraga',
-        'author': 'Guimarães Rosa',
-        'year': 1963
-    }
-]
 
-
-class Books(Resource):
-    @staticmethod
-    def get():
-        return {'Books': books}
 
 
 
