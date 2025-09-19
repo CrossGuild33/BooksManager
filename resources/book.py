@@ -73,4 +73,6 @@ class Book(Resource):
                 return new_book, 201
 
     def delete(self, book_id):
-        pass
+        global books
+        books = [book for book in books if book['book_id'] != book_id]
+        return {'message': 'Book deleted.'}
