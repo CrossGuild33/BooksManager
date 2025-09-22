@@ -13,7 +13,20 @@ books = [
     }
 
 ]
+class BookModel:
+    def __init__(self, book_id, title, author, year):
+        self.book_id = book_id
+        self.title = title
+        self.author = author
+        self.year = year
 
+    def json(self):
+        return {
+            'book_id': self.book_id,
+            'title': self.title,
+            'author': self.author,
+            'year': self.year
+        }
 
 class Books(Resource):
     @staticmethod
@@ -39,24 +52,19 @@ class Book(Resource):
         return {'message': 'Book not found'}, 404
 
     def post(self, book_id):
-
-
         dados = Book.argumentos.parse_args()
-
-        new_book = {
-            'book_id': book_id, **dados}
-
+        book_object = BookModel(book_id, **dados)
+        new_book = book_object.json()
         books.append(new_book)
         return new_book, 200
 
     def put(self, book_id):
-        book = Book.find_book(book_id)
-
         dados = Book.argumentos.parse_args()
 
-        new_book = {
-            'book_id': book_id, **dados}
+        book_object = BookModel(book_id, **dados)
+        new_book = book_object.json()
 
+        book = Book.find_book(book_id)
         if book:
             book.update(new_book)
             return new_book, 200 # OK
