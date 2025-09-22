@@ -3,11 +3,13 @@ from models.book import BookModel
 
 books = [
     {
+        'book_id': 1,
         'title': 'Hora e a Vez de Augusto Matraga',
         'author': 'Guimarães Rosa',
         'year': 1963
     },
     {
+        'book_id': 2,
         'title': 'O Tempo e o Vento',
         'author': 'Erico Verissimo',
         'year': 1952
