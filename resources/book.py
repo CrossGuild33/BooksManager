@@ -21,56 +21,47 @@ class Books(Resource):
         return {'books': books}
 
 class Book(Resource):
-    def get(self, book_id):
+    argumentos = reqparse.RequestParser()
+    argumentos.add_argument('title')
+    argumentos.add_argument('author')
+    argumentos.add_argument('year')
+
+    def find_book(book_id):
         for book in books:
-            if books['book_id'] == book_id:
+            if book['book_id'] == book_id:
                 return book
+            return None
+
+    def get(self, book_id):
+        book = Book.find_book(book_id)
+        if book:
+            return book
         return {'message': 'Book not found'}, 404
 
     def post(self, book_id):
-        argumentos = reqparse.RequestParser()
-        argumentos.add_argument('title')
-        argumentos.add_argument('author')
-        argumentos.add_argument('year')
 
-        dados = argumentos.parse_args()
+
+        dados = Book.argumentos.parse_args()
 
         new_book = {
-            'book_id': book_id,
-            'title': dados['title'],
-            'author': dados['author'],
-            'year': dados['year']
-        }
+            'book_id': book_id, **dados}
 
         books.append(new_book)
         return new_book, 200
 
     def put(self, book_id):
-        argumentos = reqparse.RequestParser()
-        argumentos.add_argument('title')
-        argumentos.add_argument('author')
-        argumentos.add_argument('year')
+        book = Book.find_book(book_id)
 
-        dados = argumentos.parse_args()
+        dados = Book.argumentos.parse_args()
 
         new_book = {
-            'book_id': book_id,
-            'title': dados['title'],
-            'author': dados['author'],
-            'year': dados['year']
-        }
+            'book_id': book_id, **dados}
 
-        for book in books:
-            if books['book_id'] == book_id:
-                return book
-        return None
-        if book is not None:
-            for book in books:
-                if book['book_id'] == book_id:
-                    book.update(new_book)
-                    return new_book, 200
-                books.append(book)
-                return new_book, 201
+        if book:
+            book.update(new_book)
+            return new_book, 200 # OK
+        books.append(new_book)
+        return new_book, 201 # Cria o objeto caso ele não exista
 
     def delete(self, book_id):
         global books
